@@ -8,13 +8,13 @@ var spellService = require('./spell-service');
 
 // Setup Restify Server
 var server = restify.createServer();
-server.listen(process.env.port || process.env.PORT || 3978, function () {
+server.listen(process.env.port || process.env.PORT || 80, function () {
     console.log('%s listening to %s', server.name, server.url);
 });
 // Create connector and listen for messages
 var connector = new builder.ChatConnector({
-    appId: process.env.MICROSOFT_APP_ID,
-    appPassword: process.env.MICROSOFT_APP_PASSWORD
+    appId: "501e43c4-9a90-4c8c-a481-29a2a36f8e3b",//process.env.MICROSOFT_APP_ID,
+    appPassword: "16z584r6Nvs7vP68YpKumvd" //process.env.MICROSOFT_APP_PASSWORD
 });
 server.post('/api/messages', connector.listen());
 
@@ -24,7 +24,10 @@ var bot = new builder.UniversalBot(connector, function (session) {
 
 // You can provide your own model by specifing the 'LUIS_MODEL_URL' environment variable
 // This Url can be obtained by uploading or creating your model from the LUIS portal: https://www.luis.ai/
-var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
+
+var luisModel = "https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/c7a0c785-8ecb-4a9d-a7fa-2f9cef640d28?subscription-key=1cb0e0a3565d41a6abd71eaad5a8b911&staging=true&verbose=true&timezoneOffset=0";
+//var recognizer = new builder.LuisRecognizer(process.env.LUIS_MODEL_URL);
+var recognizer = new builder.LuisRecognizer(luisModel);
 bot.recognizer(recognizer);
 
 bot.dialog('SearchHotels', [
